@@ -42,6 +42,7 @@ export default defineNuxtConfig({
     '~/plugins/paymentsApi.ts',
     '~/plugins/settlementsApi.ts',
     '~/plugins/walletsApi.ts',
+    '~/plugins/programmableWalletsApi.ts',
     '~/plugins/paymentIntentsApi.ts',
     '~/plugins/mocksApi.ts',
     '~/plugins/stablefxTradesApi.ts',

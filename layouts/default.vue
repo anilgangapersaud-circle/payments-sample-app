@@ -177,19 +177,64 @@
         <NuxtPage />
       </v-container>
     </v-main>
-    <v-navigation-drawer v-model="showRightDrawer" location="right" temporary>
+    <v-navigation-drawer v-model="showRightDrawer" location="right" temporary width="400">
       <div class="pa-3 pt-8">
-        <p>Settings</p>
-        <v-form class="mt-8">
+        <p class="text-h6 mb-4">Settings</p>
+        <v-form class="mt-4">
+
+          <!-- API Keys Section -->
           <v-text-field
             v-model="apiKey"
-            label="Your API key"
+            label="Circle API Key"
             variant="outlined"
+            type="password"
+            class="mb-3"
           />
-          <p class="subtitle-2 font-weight-light mb-8">
-            Do not share or record your API keys in publicly accessible mediums
-            such as GitHub, client-side code, etc.
-          </p>
+          
+          <template v-if="!getIsInternal()">
+            <v-expansion-panels class="mb-4" variant="accordion">
+              <v-expansion-panel>
+                <v-expansion-panel-title>
+                  <div class="d-flex align-center">
+                    <v-icon class="mr-3" color="primary">mdi-wallet</v-icon>
+                    <div>
+                      <div class="text-subtitle-1">Developer Controlled Wallets</div>
+                      <div class="text-caption text-medium-emphasis">
+                        Configure API credentials for programmable wallets
+                      </div>
+                    </div>
+                  </div>
+                </v-expansion-panel-title>
+                <v-expansion-panel-text>
+                  <div class="pt-2">
+                    <v-text-field
+                      v-model="walletApiKey"
+                      label="Programmable Wallets API Key"
+                      variant="outlined"
+                      type="password"
+                      density="compact"
+                      class="mb-3"
+                      hint="Your Circle Programmable Wallets API key"
+                      persistent-hint
+                    />
+
+                    <v-text-field
+                      v-model="entitySecret"
+                      label="Entity Secret"
+                      variant="outlined"
+                      type="password"
+                      density="compact"
+                      class="mb-3"
+                      hint="Required for wallet authentication and encryption"
+                      persistent-hint
+                    />
+
+                  </div>
+                </v-expansion-panel-text>
+              </v-expansion-panel>
+            </v-expansion-panels>
+          </template>
+
         </v-form>
       </div>
     </v-navigation-drawer>
@@ -197,6 +242,8 @@
 </template>
 
 <script setup lang="ts">
+import { getIsInternal } from '@/lib/apiTarget'
+
 const store = useMainStore()
 
 const coreLinks = [
@@ -472,7 +519,6 @@ const stablefxTradesLinks = [
     to: '/debug/stablefx/fund',
   },
 ]
-
 const miniVariant = ref(false)
 const showRightDrawer = ref(false)
 const showDrawer = ref(false)
@@ -480,6 +526,16 @@ const showDrawer = ref(false)
 const apiKey = computed({
   get: () => store.getApiKey,
   set: (value: string) => store.setBearerToken(value),
+})
+
+const walletApiKey = computed({
+  get: () => store.getWalletApiKey,
+  set: (value: string) => store.setWalletApiKey(value),
+})
+
+const entitySecret = computed({
+  get: () => store.getEntitySecret,
+  set: (value: string) => store.setEntitySecret(value),
 })
 </script>
 
